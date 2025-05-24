@@ -1,0 +1,78 @@
+{
+  "income_records": [
+    {
+      "id": 1,
+      "date": "2025-05-24 00:00:00",
+      "amount": 400.0,
+      "description": "Evntos Halloween Ronda 1",
+      "client_name": "MHEL",
+      "invoice_number": "1",
+      "commission_rate": 12.05,
+      "taxes": {
+        "iva_amount": 64.0,
+        "net_amount": 344.82758620689657
+      }
+    },
+    {
+      "id": 2,
+      "date": "2025-06-07 00:00:00",
+      "amount": 400.0,
+      "description": "Evntos Halloween Ronda 1",
+      "client_name": "MHEL",
+      "invoice_number": "2",
+      "commission_rate": 12.05,
+      "taxes": {
+        "iva_amount": 64.0,
+        "net_amount": 344.82758620689657
+      }
+    },
+    {
+      "id": 3,
+      "date": "2025-06-21 00:00:00",
+      "amount": 400.0,
+      "description": "Evntos Halloween Ronda 3",
+      "client_name": "MHEL",
+      "invoice_number": "3",
+      "commission_rate": 12.05,
+      "taxes": {
+        "iva_amount": 64.0,
+        "net_amount": 344.82758620689657
+      }
+    },
+    {
+      "id": 4,
+      "date": "2025-07-05 00:00:00",
+      "amount": 400.0,
+      "description": "Evntos Halloween Ronda 4",
+      "client_name": "MHEL",
+      "invoice_number": "4",
+      "commission_rate": 12.05,
+      "taxes": {
+        "iva_amount": 64.0,
+        "net_amount": 344.82758620689657
+      }
+    }
+  ],
+  "expense_records": [
+    {
+      "id": 1,
+      "date": "2025-05-24 00:00:00",
+      "amount": 64.0,
+      "description": "Paquete Basico",
+      "category": "AWS Infrastructure",
+      "infrastructure_tier": "B\u00e1sico"
+    },
+    {
+      "id": 2,
+      "date": "2025-06-24 00:00:00",
+      "amount": 64.0,
+      "description": "Paquete Basico",
+      "category": "AWS Infrastructure",
+      "infrastructure_tier": "B\u00e1sico"
+    }
+  ],
+  "salary_payments": [],
+  "dividend_payments": [],
+  "cash_balance": 1472.0,
+  "last_updated": "2025-05-24 07:47:11.789576"
+}

@@ -6,6 +6,7 @@ import plotly.express as px
 from datetime import datetime, timedelta
 from aws_infrastructure_advisor import AWSInfrastructureAdvisor
 from enhanced_infrastructure_advisor import EnhancedAWSInfrastructureAdvisor
+from temporal_infrastructure_planner import show_temporal_infrastructure_analysis
 
 def format_currency(amount):
     """Format currency with consistent $1,000.00 pattern"""
@@ -283,7 +284,23 @@ def show_shared_multi_event_analysis():
         with col2:
             occupancy_rate = st.slider("Expected Occupancy (%)", 10, 100, 80)
             commission_rate = st.slider("Commission Rate (%)", 5, 25, 10)
-            event_date = st.date_input("Event Date", value=datetime.now())
+            
+            # Add start date with intelligent default
+            default_start_date = datetime.now().date()
+            start_date = st.date_input(
+                "Tickets Available From", 
+                value=default_start_date,
+                help="When tickets become available for purchase (defaults to today)"
+            )
+            
+            # Event date must be after start date
+            min_event_date = start_date
+            event_date = st.date_input(
+                "Event Date", 
+                value=max(datetime.now().date(), min_event_date),
+                min_value=min_event_date,
+                help="Actual event date"
+            )
         
         if st.button("Add Event to Campaign"):
             new_event = {
@@ -292,6 +309,7 @@ def show_shared_multi_event_analysis():
                 'num_tickets': num_tickets,
                 'occupancy_rate': occupancy_rate,
                 'commission_rate': commission_rate,
+                'start_date': start_date,
                 'event_date': event_date
             }
             st.session_state.shared_events.append(new_event)
@@ -307,16 +325,43 @@ def show_shared_multi_event_analysis():
     if st.session_state.shared_events:
         analyzer.events = st.session_state.shared_events
         
-        # Show events summary
+        # Show events summary with campaign duration
         total_tickets = sum(event['num_tickets'] for event in st.session_state.shared_events)
-        st.subheader(f"📋 Campaign Overview: {len(st.session_state.shared_events)} Events • {total_tickets:,} Total Tickets")
+        
+        # Calculate total campaign duration
+        start_dates = [event.get('start_date', event['event_date']) for event in st.session_state.shared_events]
+        event_dates = [event['event_date'] for event in st.session_state.shared_events]
+        campaign_start = min(start_dates)
+        campaign_end = max(event_dates)
+        total_campaign_days = (campaign_end - campaign_start).days + 1
+        
+        st.subheader(f"📋 Campaign Overview: {len(st.session_state.shared_events)} Events • {total_tickets:,} Total Tickets • {total_campaign_days} Days Duration")
         
         events_df = pd.DataFrame(st.session_state.shared_events)
         events_df['Tickets Sold'] = (events_df['num_tickets'] * events_df['occupancy_rate'] / 100).astype(int)
         
         # Create display dataframe with proper headers and formatting
-        display_df = events_df[['name', 'ticket_price', 'num_tickets', 'occupancy_rate', 'commission_rate', 'event_date']].copy()
-        display_df.columns = ['Event Name', 'Ticket Price ($)', 'Total Tickets', 'Occupancy (%)', 'Commission (%)', 'Event Date']
+        # Add "Days in Campaign" calculation with proper date handling
+        events_df_copy = events_df.copy()
+        
+        # Ensure dates are datetime objects and calculate days
+        try:
+            # Convert to datetime if they aren't already
+            events_df_copy['start_date'] = pd.to_datetime(events_df_copy['start_date'])
+            events_df_copy['event_date'] = pd.to_datetime(events_df_copy['event_date'])
+            
+            # Calculate days in campaign
+            events_df_copy['days_in_campaign'] = (events_df_copy['event_date'] - events_df_copy['start_date']).dt.days + 1
+        except Exception as e:
+            # Fallback calculation if datetime conversion fails
+            events_df_copy['days_in_campaign'] = events_df_copy.apply(
+                lambda row: (row['event_date'] - row['start_date']).days + 1 
+                if hasattr(row['event_date'] - row['start_date'], 'days') 
+                else 0, axis=1
+            )
+        
+        display_df = events_df_copy[['name', 'ticket_price', 'num_tickets', 'occupancy_rate', 'commission_rate', 'start_date', 'event_date', 'days_in_campaign']].copy()
+        display_df.columns = ['Event Name', 'Ticket Price ($)', 'Total Tickets', 'Occupancy (%)', 'Commission (%)', 'Start Date', 'Event Date', 'Days in Campaign']
         
         # Format money columns
         display_df['Ticket Price ($)'] = display_df['Ticket Price ($)'].apply(lambda x: f"${x:,.2f}")
@@ -334,7 +379,9 @@ def show_shared_multi_event_analysis():
                 "Total Tickets": st.column_config.NumberColumn("Total Tickets", min_value=1, step=1),
                 "Occupancy (%)": st.column_config.NumberColumn("Occupancy (%)", min_value=1, max_value=100, step=1),
                 "Commission (%)": st.column_config.NumberColumn("Commission (%)", min_value=1, max_value=50, step=1),
-                "Event Date": st.column_config.DateColumn("Event Date")
+                "Start Date": st.column_config.DateColumn("Start Date"),
+                "Event Date": st.column_config.DateColumn("Event Date"),
+                "Days in Campaign": st.column_config.NumberColumn("Days in Campaign", disabled=True, help="Automatically calculated from Start Date to Event Date")
             }
         )
         
@@ -357,7 +404,9 @@ def show_shared_multi_event_analysis():
                         'num_tickets': int(row['Total Tickets']),
                         'occupancy_rate': int(row['Occupancy (%)']),
                         'commission_rate': int(row['Commission (%)']),
+                        'start_date': row['Start Date'],
                         'event_date': row['Event Date']
+                        # Note: 'Days in Campaign' is auto-calculated, not stored
                     }
                     updated_events.append(updated_event)
                 
@@ -391,7 +440,13 @@ def show_shared_multi_event_analysis():
             st.rerun()
         
         # Analysis tabs
-        tab1, tab2, tab3, tab4 = st.tabs(["🎯 Break-Even Analysis", "📊 Commission Comparison", "📈 Cumulative Profitability", "💰 Cost Summary"])
+        tab1, tab2, tab3, tab4, tab5 = st.tabs([
+            "🎯 Break-Even Analysis", 
+            "📊 Commission Comparison", 
+            "📈 Cumulative Profitability", 
+            "💰 Cost Summary",
+            "⏰ Temporal Infrastructure"
+        ])
         
         with tab1:
             st.header("🏆 Break-Even Analysis")
@@ -1352,6 +1407,24 @@ def show_shared_multi_event_analysis():
                     )
                     
                     st.plotly_chart(fig, use_container_width=True)
+        
+        with tab5:
+            st.header("⏰ Temporal Infrastructure Planning")
+            st.markdown("**Optimize infrastructure costs across time periods based on demand patterns**")
+            
+            # Check if events have start_date (for backward compatibility)
+            events_with_start_dates = []
+            for event in st.session_state.shared_events:
+                if 'start_date' not in event:
+                    # Default start_date to event_date for backward compatibility
+                    event_copy = event.copy()
+                    event_copy['start_date'] = event['event_date']
+                    events_with_start_dates.append(event_copy)
+                else:
+                    events_with_start_dates.append(event)
+            
+            # Show temporal infrastructure analysis
+            show_temporal_infrastructure_analysis(events_with_start_dates)
     
     else:
         st.info("👆 Add your first event to start the analysis!")
