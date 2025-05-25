@@ -456,7 +456,7 @@ def show_temporal_infrastructure_analysis(events: List[Dict]):
     """Display temporal infrastructure planning interface"""
     
     if not events:
-        st.warning(":material/warning: Add events to see temporal infrastructure planning")
+        st.warning("⚠️ Add events to see temporal infrastructure planning")
         return
     
     # Calculate campaign duration for title
@@ -466,9 +466,9 @@ def show_temporal_infrastructure_analysis(events: List[Dict]):
     campaign_end = max(event_dates)
     campaign_duration_days = (campaign_end - campaign_start).days + 1
     
-    st.header(":material/bar_chart: Temporal Infrastructure Planning")
+    st.header("📊 Temporal Infrastructure Planning")
     st.markdown(f"**Right-size infrastructure across 2-week periods • Campaign Duration: {campaign_duration_days} days**")
-    st.markdown("**:material/build: AWS Infrastructure costs only - salaries are flat monthly rate regardless of tier**")
+    st.markdown("**🔧 AWS Infrastructure costs only - salaries are flat monthly rate regardless of tier**")
     
     # Initialize planner
     planner = TemporalInfrastructurePlanner()
@@ -492,10 +492,10 @@ def show_temporal_infrastructure_analysis(events: List[Dict]):
     
     # Tabs for different views
     tab1, tab2, tab3, tab4 = st.tabs([
-        ":material/trending_up: Demand Timeline", 
-        ":material/construction: Infrastructure Planning", 
-        ":material/attach_money: Cost Optimization", 
-        ":material/bar_chart: Period Details"
+        "📈 Demand Timeline", 
+        "🏗️ Infrastructure Planning", 
+        "💰 Cost Optimization", 
+        "📊 Period Details"
     ])
     
     with tab1:
@@ -603,23 +603,23 @@ def show_temporal_infrastructure_analysis(events: List[Dict]):
             col1, col2 = st.columns(2)
             
             with col1:
-                st.markdown("**:material/lightbulb: Temporal Optimization Benefits (AWS Infrastructure Only):**")
+                st.markdown("**💡 Temporal Optimization Benefits (AWS Infrastructure Only):**")
                 st.success(f"**AWS Infrastructure Savings: ${optimization_analysis['total_savings']:,.2f}**")
                 st.info(f"**AWS Savings Percentage: {optimization_analysis['savings_percentage']:.1f}%**")
                 st.write(f"**Optimized AWS Cost:** ${optimization_analysis['total_optimized_cost']:,.2f}")
                 st.write(f"**Single Tier AWS Cost:** ${optimization_analysis['uniform_tier_cost']:,.2f}")
                 st.write(f"**Single Tier Needed:** {optimization_analysis['uniform_tier_needed']}")
-                st.caption(":material/lightbulb: Salaries remain constant monthly regardless of infrastructure tier")
+                st.caption("💡 Salaries remain constant monthly regardless of infrastructure tier")
             
             with col2:
-                st.markdown("**:material/bar_chart: Period Analysis:**")
+                st.markdown("**📊 Period Analysis:**")
                 st.metric("Total Periods", optimization_analysis['periods_count'])
                 st.metric("Low Usage Periods", optimization_analysis['low_usage_periods'])
                 st.metric("High Usage Periods", optimization_analysis['high_usage_periods'])
             
             # Recommendations
             if optimization_analysis['optimization_recommendations']:
-                st.markdown("**:material/gps_fixed: Optimization Recommendations:**")
+                st.markdown("**🎯 Optimization Recommendations:**")
                 for rec in optimization_analysis['optimization_recommendations']:
                     st.write(f"• {rec}")
             
@@ -672,7 +672,7 @@ def show_temporal_infrastructure_analysis(events: List[Dict]):
             col1, col2 = st.columns(2)
             
             with col1:
-                st.markdown(f"**:material/calendar_today: Period {period_data['period_number']} Details**")
+                st.markdown(f"**📅 Period {period_data['period_number']} Details**")
                 st.write(f"**Duration:** {period_data['start_date']} to {period_data['end_date']}")
                 st.write(f"**Days:** {period_data['duration_days']}")
                 st.write(f"**Active Events:** {period_data['active_events']}")
@@ -682,12 +682,12 @@ def show_temporal_infrastructure_analysis(events: List[Dict]):
                 st.write(f"**Total Cost:** ${period_data['total_cost']:,.2f}")
             
             with col2:
-                st.markdown("**:material/refresh: Alternative Tier Options:**")
+                st.markdown("**🔄 Alternative Tier Options:**")
                 alternatives = period_data['alternatives']
                 alt_data = []
                 
                 for tier_name, alt_info in alternatives.items():
-                    suitable_icon = ":material/check_circle:" if alt_info['suitable'] else ":material/cancel:"
+                    suitable_icon = "✅" if alt_info['suitable'] else "❌"
                     
                     # Format cost display
                     cost_display = f"${alt_info['total_cost']:,.2f}"
@@ -709,7 +709,7 @@ def show_temporal_infrastructure_analysis(events: List[Dict]):
             
             # Event details for this period
             if period_data['event_details']:
-                st.markdown(f"**:material/theater_comedy: Events Active in Period {period_data['period_number']}:**")
+                st.markdown(f"**🎭 Events Active in Period {period_data['period_number']}:**")
                 event_details_df = pd.DataFrame(period_data['event_details'])
                 event_details_df['demand'] = event_details_df['demand'].round(1)
                 event_details_df['load'] = event_details_df['load'].round(1)

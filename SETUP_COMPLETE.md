@@ -140,7 +140,7 @@ The codebase is designed for easy expansion:
 - Add competitor pricing analysis
 - Create automated reporting features
 
-## 📝 Notes
+## :material/inventory: Notes
 
 - All cost estimates are based on current market rates (May 2024)
 - Blockchain costs may vary with MATIC price fluctuations

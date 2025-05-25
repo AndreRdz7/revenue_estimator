@@ -98,7 +98,7 @@ class MultiEventAnalyzer:
 
 def show_multi_event_analysis():
     """Display multi-event analysis interface"""
-    st.title(":material/calendar_today: Multi-Event Revenue Analysis")
+    st.title("📅 Multi-Event Revenue Analysis")
     st.markdown("---")
     
     # Initialize session state for events
@@ -106,7 +106,7 @@ def show_multi_event_analysis():
         st.session_state.events = []
     
     # Event input form
-    with st.expander(":material/add: Add New Event", expanded=True):
+    with st.expander("➕ Add New Event", expanded=True):
         col1, col2 = st.columns(2)
         
         with col1:
@@ -139,7 +139,7 @@ def show_multi_event_analysis():
     
     # Display current events
     if st.session_state.events:
-        st.subheader(":material/assignment: Current Events")
+        st.subheader("📋 Current Events")
         
         # Create events dataframe for display
         events_df = pd.DataFrame(st.session_state.events)
@@ -153,12 +153,12 @@ def show_multi_event_analysis():
         )
         
         # Clear events button
-        if st.button(":material/delete: Clear All Events"):
+        if st.button("🗑️ Clear All Events"):
             st.session_state.events = []
             st.rerun()
         
         # Analysis tabs
-        tab1, tab2, tab3, tab4 = st.tabs([":material/attach_money: Revenue Summary", ":material/trending_up: Projections", ":material/gps_fixed: ROI Analysis", ":material/bar_chart: Comparisons"])
+        tab1, tab2, tab3, tab4 = st.tabs(["💰 Revenue Summary", "📈 Projections", "🎯 ROI Analysis", "📊 Comparisons"])
         
         with tab1:
             st.header("Revenue Summary")

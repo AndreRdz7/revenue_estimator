@@ -9,7 +9,7 @@ from dateutil.relativedelta import relativedelta
 # Page configuration
 st.set_page_config(
     page_title="E-Ticketing Revenue Estimator",
-    page_icon=":material/confirmation_number:",
+    page_icon="🎫",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -78,7 +78,7 @@ def calculate_per_ticket_costs(num_tickets, processor):
     return matic_cost + seatsio_cost
 
 def main():
-    st.title(":material/confirmation_number: E-Ticketing Platform Revenue Estimator")
+    st.title("🎫 E-Ticketing Platform Revenue Estimator")
     st.markdown("---")
     
     # Sidebar for main parameters
@@ -151,7 +151,7 @@ def main():
     st.sidebar.write(f"MercadoPago: {mercadopago_pct}%")
     
     # Main content area with tabs
-    tab1, tab2, tab3, tab4 = st.tabs([":material/attach_money: Revenue Analysis", ":material/bar_chart: Break-Even Analysis", ":material/trending_up: Commission Comparison", ":material/build: Cost Breakdown"])
+    tab1, tab2, tab3, tab4 = st.tabs(["💰 Revenue Analysis", "📊 Break-Even Analysis", "📈 Commission Comparison", "🔧 Cost Breakdown"])
     
     with tab1:
         st.header("Revenue Analysis")
@@ -250,7 +250,7 @@ def main():
             line=dict(color='blue', width=3)
         ))
         
-        # Add golden break-even marker! :material/emoji_events:
+        # Add golden break-even marker! 🏆
         breakeven_rates = df_revenue[df_revenue['Net Revenue'] >= 0]['Commission Rate (%)']
         if not breakeven_rates.empty:
             breakeven_rate = breakeven_rates.iloc[0]
@@ -260,7 +260,7 @@ def main():
                 x=[breakeven_rate],
                 y=[breakeven_row['Net Revenue']],
                 mode='markers',
-                name=f':material/emoji_events: Break-Even Point ({breakeven_rate}%)',
+                name=f'🏆 Break-Even Point ({breakeven_rate}%)',
                 marker=dict(
                     color='gold',
                     size=15,
@@ -295,7 +295,7 @@ def main():
         
         if breakeven_rates:
             min_breakeven = min(breakeven_rates)
-            st.success(f":material/check_circle: Break-even achieved at {min_breakeven}% commission rate")
+            st.success(f"✅ Break-even achieved at {min_breakeven}% commission rate")
             
             # Show break-even metrics
             breakeven_row = df_revenue[df_revenue['Commission Rate (%)'] == min_breakeven].iloc[0]
@@ -310,7 +310,7 @@ def main():
             with col4:
                 st.metric("Net Revenue", f"${breakeven_row['Net Revenue']:,.2f}")
         else:
-            st.error(":material/cancel: Break-even not achieved within the commission range. Consider:")
+            st.error("❌ Break-even not achieved within the commission range. Consider:")
             st.write("- Increasing commission rates")
             st.write("- Reducing infrastructure tier")
             st.write("- Increasing ticket sales")

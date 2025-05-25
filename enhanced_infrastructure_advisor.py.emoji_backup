@@ -497,29 +497,29 @@ class EnhancedAWSInfrastructureAdvisor:
         # Email optimization
         email_volume = operations['qr_email_phase']['emails_to_send']
         if email_volume > 10000:
-            notes.append(f":material/email: Consider SES bulk sending for {email_volume:,} emails to reduce costs")
+            notes.append(f"📧 Consider SES bulk sending for {email_volume:,} emails to reduce costs")
         
         # QR generation optimization
         qr_count = operations['qr_email_phase']['qr_generations_needed']
         if qr_count > 5000:
-            notes.append(f":material/link: Use Lambda for QR generation ({qr_count:,} QRs) - batch process during low-traffic hours")
+            notes.append(f"🔗 Use Lambda for QR generation ({qr_count:,} QRs) - batch process during low-traffic hours")
         
         # Scanning optimization
         peak_scans = operations['event_day_scanning']['peak_scans_per_hour']
         if peak_scans > 500:
-            notes.append(f":material/flash_on: Redis caching critical for {peak_scans:,} scans/hour - consider read replicas")
+            notes.append(f"⚡ Redis caching critical for {peak_scans:,} scans/hour - consider read replicas")
         
         # Database optimization
         if requirements['peak_db_connections'] > 100:
-            notes.append(":material/storage: Consider RDS Proxy to manage connection pooling efficiently")
+            notes.append("🗄️ Consider RDS Proxy to manage connection pooling efficiently")
         
         # Latency optimization
         if requirements['latency_target_ms'] < 200:
-            notes.append(":material/rocket_launch: Multi-AZ deployment and CloudFront recommended for <200ms latency")
+            notes.append("🚀 Multi-AZ deployment and CloudFront recommended for <200ms latency")
         
         # Cost optimization
         if requirements['peak_concurrent_users'] < 100:
-            notes.append(":material/attach_money: Consider Aurora Serverless for variable workloads")
+            notes.append("💰 Consider Aurora Serverless for variable workloads")
         
         return notes
     
@@ -633,16 +633,16 @@ class EnhancedAWSInfrastructureAdvisor:
         
         if latency_priority or requirements['latency_target_ms'] < 500:
             recommendations.append(":material/public: Use multiple AWS regions for global latency optimization")
-            recommendations.append(":material/flash_on: Enable CloudFront CDN with aggressive caching policies")
-            recommendations.append(":material/refresh: Implement Redis cluster for sub-100ms cache responses")
+            recommendations.append("⚡ Enable CloudFront CDN with aggressive caching policies")
+            recommendations.append("🔄 Implement Redis cluster for sub-100ms cache responses")
             
         if requirements['peak_concurrent_users'] > 1000:
-            recommendations.append(":material/balance: Use Application Load Balancer with least-latency routing")
-            recommendations.append(":material/bar_chart: Enable detailed CloudWatch monitoring for latency tracking")
+            recommendations.append("⚖️ Use Application Load Balancer with least-latency routing")
+            recommendations.append("📊 Enable detailed CloudWatch monitoring for latency tracking")
         
         if analysis['operations']['event_day_scanning']['peak_scans_per_hour'] > 1000:
-            recommendations.append(":material/confirmation_number: Pre-cache ticket validation data before event start")
-            recommendations.append(":material/smartphone: Use DynamoDB for ultra-fast ticket lookups during scanning")
+            recommendations.append("🎫 Pre-cache ticket validation data before event start")
+            recommendations.append("📱 Use DynamoDB for ultra-fast ticket lookups during scanning")
         
         return recommendations
     

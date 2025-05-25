@@ -14,11 +14,11 @@ sys.path.append(os.path.dirname(__file__))
 try:
     from enhanced_infrastructure_advisor import EnhancedAWSInfrastructureAdvisor
     
-    print(":material/check_circle: Enhanced advisor imported successfully")
+    print("✅ Enhanced advisor imported successfully")
     
     # Create advisor instance
     advisor = EnhancedAWSInfrastructureAdvisor()
-    print(":material/check_circle: Advisor instance created")
+    print("✅ Advisor instance created")
     
     # Test with sample events
     events = [
@@ -36,18 +36,18 @@ try:
         }
     ]
     
-    print(f":material/check_circle: Created {len(events)} test events")
+    print(f"✅ Created {len(events)} test events")
     
     # Test operational analysis
     analysis = advisor.analyze_operational_requirements(events)
-    print(":material/check_circle: Operational analysis completed")
+    print("✅ Operational analysis completed")
     print(f"   - Peak concurrent users: {analysis['requirements']['peak_concurrent_users']}")
     print(f"   - Email volume: {analysis['requirements']['email_volume']}")
     print(f"   - Total events: {analysis['requirements']['total_events']}")
     
     # Test infrastructure recommendation
     recommendation = advisor.recommend_infrastructure(events, latency_priority=False)
-    print(f":material/check_circle: Infrastructure recommendation completed")
+    print(f"✅ Infrastructure recommendation completed")
     print(f"   - Type: {recommendation['type']}")
     print(f"   - Confidence: {recommendation['confidence']}")
     
@@ -63,18 +63,18 @@ try:
     
     # Test with latency priority
     latency_recommendation = advisor.recommend_infrastructure(events, latency_priority=True)
-    print(f":material/check_circle: Latency-priority recommendation completed")
+    print(f"✅ Latency-priority recommendation completed")
     print(f"   - Type: {latency_recommendation['type']}")
     
     # Test cost breakdown
     if recommendation['type'] == 'custom':
         breakdown = advisor.generate_detailed_cost_breakdown(recommendation)
-        print(f":material/check_circle: Cost breakdown generated: {len(breakdown)} services")
+        print(f"✅ Cost breakdown generated: {len(breakdown)} services")
     
-    print("\n:material/celebration: All tests passed! Enhanced advisor is working correctly.")
+    print("\n🎉 All tests passed! Enhanced advisor is working correctly.")
     
 except Exception as e:
-    print(f":material/cancel: Error: {e}")
+    print(f"❌ Error: {e}")
     import traceback
     traceback.print_exc()
     sys.exit(1) 

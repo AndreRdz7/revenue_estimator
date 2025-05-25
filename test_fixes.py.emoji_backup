@@ -10,7 +10,7 @@ from enhanced_infrastructure_advisor import EnhancedAWSInfrastructureAdvisor
 
 def test_enhanced_advisor():
     """Test the enhanced advisor functionality."""
-    print(":material/science: Testing Enhanced AWS Infrastructure Advisor...")
+    print("🧪 Testing Enhanced AWS Infrastructure Advisor...")
     
     advisor = EnhancedAWSInfrastructureAdvisor()
     
@@ -30,12 +30,12 @@ def test_enhanced_advisor():
         }
     ]
     
-    print(f":material/bar_chart: Testing with {len(events)} events...")
+    print(f"📊 Testing with {len(events)} events...")
     
     # Test recommendation generation
     try:
         recommendation = advisor.recommend_infrastructure(events)
-        print(f":material/check_circle: Recommendation generated successfully!")
+        print(f"✅ Recommendation generated successfully!")
         print(f"   Type: {recommendation['type']}")
         print(f"   Confidence: {recommendation['confidence']}")
         
@@ -46,7 +46,7 @@ def test_enhanced_advisor():
             
             # Test Redis cost analysis
             cache_memory = recommendation['analysis']['requirements']['cache_memory_gb']
-            print(f"\n:material/save: Testing Redis Cost Analysis...")
+            print(f"\n💾 Testing Redis Cost Analysis...")
             print(f"   Cache Memory Needed: {cache_memory:.1f} GB")
             
             # Test Redis comparison
@@ -59,7 +59,7 @@ def test_enhanced_advisor():
             print(f"   Break-even: {savings_analysis['break_even_months']:.1f} months")
             
             # Show self-hosted options
-            print(f"\n:material/computer: Self-Hosted Redis Options:")
+            print(f"\n🖥️ Self-Hosted Redis Options:")
             for key, option in advisor.self_hosted_redis.items():
                 print(f"   {option['name']}: ${option['monthly_total_cost']:,.2f}/month")
                 print(f"     Hardware: ${option['hardware_cost_usd']:,.2f}")
@@ -70,15 +70,15 @@ def test_enhanced_advisor():
             print(f"   Monthly Cost: ${recommendation['config']['total_cost']:,.2f}")
         
     except Exception as e:
-        print(f":material/cancel: Error in recommendation: {e}")
+        print(f"❌ Error in recommendation: {e}")
         return False
     
-    print(f"\n:material/check_circle: All tests passed! Enhanced advisor working correctly.")
+    print(f"\n✅ All tests passed! Enhanced advisor working correctly.")
     return True
 
 def test_currency_formatting():
     """Test currency formatting consistency."""
-    print(f"\n:material/attach_money: Testing Currency Formatting...")
+    print(f"\n💰 Testing Currency Formatting...")
     
     test_amounts = [1234.56, 12345.67, 123456.78, 1234567.89]
     
@@ -86,10 +86,10 @@ def test_currency_formatting():
         formatted = f"${amount:,.2f}"
         print(f"   {amount} -> {formatted}")
     
-    print(f":material/check_circle: Currency formatting consistent!")
+    print(f"✅ Currency formatting consistent!")
 
 if __name__ == "__main__":
-    print(":material/rocket_launch: Running E-Ticketing Infrastructure Tests...")
+    print("🚀 Running E-Ticketing Infrastructure Tests...")
     print("=" * 50)
     
     # Test enhanced advisor
@@ -100,12 +100,12 @@ if __name__ == "__main__":
     
     print("=" * 50)
     if success:
-        print(":material/celebration: All tests completed successfully!")
-        print("\n:material/assignment: Summary of fixes:")
-        print("   :material/check_circle: Fixed KeyError for 'requirements' in enhanced advisor")
-        print("   :material/check_circle: Added self-hosted Redis cost analysis for Puebla, Mexico")
-        print("   :material/check_circle: Standardized currency formatting to $1,000.00 pattern")
-        print("   :material/check_circle: Added comprehensive Redis vs AWS ElastiCache comparison")
-        print("   :material/check_circle: Included break-even analysis for hardware investments")
+        print("🎉 All tests completed successfully!")
+        print("\n📋 Summary of fixes:")
+        print("   ✅ Fixed KeyError for 'requirements' in enhanced advisor")
+        print("   ✅ Added self-hosted Redis cost analysis for Puebla, Mexico")
+        print("   ✅ Standardized currency formatting to $1,000.00 pattern")
+        print("   ✅ Added comprehensive Redis vs AWS ElastiCache comparison")
+        print("   ✅ Included break-even analysis for hardware investments")
     else:
-        print(":material/cancel: Some tests failed. Please check the errors above.") 
+        print("❌ Some tests failed. Please check the errors above.") 

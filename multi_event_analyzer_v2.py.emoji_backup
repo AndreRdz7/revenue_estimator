@@ -205,7 +205,7 @@ class SharedInfraMultiEventAnalyzer:
 
 def show_shared_multi_event_analysis():
     """Display the new shared infrastructure multi-event analysis"""
-    st.title(":material/business: Multi-Event Campaign Analysis")
+    st.title("🏢 Multi-Event Campaign Analysis")
     st.markdown("**Perfect for clients hosting multiple events with shared infrastructure**")
     st.markdown("---")
     
@@ -218,7 +218,7 @@ def show_shared_multi_event_analysis():
     analyzer = st.session_state.analyzer
     
     # Sidebar for shared settings
-    st.sidebar.header(":material/construction: Shared Infrastructure Settings")
+    st.sidebar.header("🏗️ Shared Infrastructure Settings")
     
     analyzer.shared_settings['infrastructure_tier'] = st.sidebar.selectbox(
         "Infrastructure Tier (Shared)",
@@ -269,7 +269,7 @@ def show_shared_multi_event_analysis():
     st.sidebar.write(f"MercadoPago: {analyzer.shared_settings['mercadopago_pct']}%")
     
     # Event input
-    with st.expander(":material/add: Add Event to Campaign", expanded=len(st.session_state.shared_events) == 0):
+    with st.expander("➕ Add Event to Campaign", expanded=len(st.session_state.shared_events) == 0):
         col1, col2 = st.columns(2)
         
         with col1:
@@ -318,7 +318,7 @@ def show_shared_multi_event_analysis():
             # Update event name for next event
             st.session_state.current_event_name = f"Event {len(st.session_state.shared_events) + 1}"
             
-            st.success(f":material/check_circle: Added {event_name} to campaign!")
+            st.success(f"✅ Added {event_name} to campaign!")
             st.rerun()
     
     # Display events
@@ -335,7 +335,7 @@ def show_shared_multi_event_analysis():
         campaign_end = max(event_dates)
         total_campaign_days = (campaign_end - campaign_start).days + 1
         
-        st.subheader(f":material/assignment: Campaign Overview: {len(st.session_state.shared_events)} Events • {total_tickets:,} Total Tickets • {total_campaign_days} Days Duration")
+        st.subheader(f"📋 Campaign Overview: {len(st.session_state.shared_events)} Events • {total_tickets:,} Total Tickets • {total_campaign_days} Days Duration")
         
         events_df = pd.DataFrame(st.session_state.shared_events)
         events_df['Tickets Sold'] = (events_df['num_tickets'] * events_df['occupancy_rate'] / 100).astype(int)
@@ -367,7 +367,7 @@ def show_shared_multi_event_analysis():
         display_df['Ticket Price ($)'] = display_df['Ticket Price ($)'].apply(lambda x: f"${x:,.2f}")
         
         # Make table editable
-        st.write("**:material/lightbulb: Tip:** Click on any cell below to edit event details")
+        st.write("**💡 Tip:** Click on any cell below to edit event details")
         edited_df = st.data_editor(
             display_df,
             use_container_width=True,
@@ -412,7 +412,7 @@ def show_shared_multi_event_analysis():
                 
                 st.session_state.shared_events = updated_events
                 analyzer.events = updated_events
-                st.success(":material/check_circle: Events updated successfully!")
+                st.success("✅ Events updated successfully!")
                 st.rerun()
             except Exception as e:
                 st.error(f"Error updating events: {str(e)}")
@@ -432,7 +432,7 @@ def show_shared_multi_event_analysis():
             avg_occupancy = events_summary_df['occupancy_rate'].mean()
             st.metric("Avg Occupancy", f"{avg_occupancy:.1f}%")
         
-        if st.button(":material/delete: Clear All Events"):
+        if st.button("🗑️ Clear All Events"):
             st.session_state.shared_events = []
             analyzer.events = []
             # Reset event name counter
@@ -441,21 +441,21 @@ def show_shared_multi_event_analysis():
         
         # Analysis tabs
         tab1, tab2, tab3, tab4, tab5 = st.tabs([
-            ":material/gps_fixed: Break-Even Analysis", 
-            ":material/bar_chart: Commission Comparison", 
-            ":material/trending_up: Cumulative Profitability", 
-            ":material/attach_money: Cost Summary",
-            ":material/alarm: Temporal Infrastructure"
+            "🎯 Break-Even Analysis", 
+            "📊 Commission Comparison", 
+            "📈 Cumulative Profitability", 
+            "💰 Cost Summary",
+            "⏰ Temporal Infrastructure"
         ])
         
         with tab1:
-            st.header(":material/emoji_events: Break-Even Analysis")
+            st.header("🏆 Break-Even Analysis")
             
             # Find optimal commission rate
             optimal_rate = analyzer.find_optimal_commission_rate()
             
             if optimal_rate:
-                st.success(f":material/check_circle: **Minimum profitable commission rate: {optimal_rate:.1f}%**")
+                st.success(f"✅ **Minimum profitable commission rate: {optimal_rate:.1f}%**")
                 
                 # Show break-even analysis at optimal rate
                 cumulative_df = analyzer.calculate_cumulative_analysis(optimal_rate)
@@ -468,7 +468,7 @@ def show_shared_multi_event_analysis():
                         break
                 
                 if breakeven_event:
-                    st.info(f":material/gps_fixed: **Break-even achieved at Event #{breakeven_event}**")
+                    st.info(f"🎯 **Break-even achieved at Event #{breakeven_event}**")
                     
                     col1, col2, col3 = st.columns(3)
                     final_row = cumulative_df.iloc[-1]
@@ -500,7 +500,7 @@ def show_shared_multi_event_analysis():
                         x=[breakeven_event],
                         y=[breakeven_row['Cumulative Net Profit']],
                         mode='markers',
-                        name=f':material/emoji_events: Break-Even (Event #{breakeven_event})',
+                        name=f'🏆 Break-Even (Event #{breakeven_event})',
                         marker=dict(color='gold', size=15, symbol='star')
                     ))
                 
@@ -513,13 +513,13 @@ def show_shared_multi_event_analysis():
                 st.plotly_chart(fig, use_container_width=True)
                 
             else:
-                st.error(":material/cancel: No profitable commission rate found up to 30%. Consider:")
+                st.error("❌ No profitable commission rate found up to 30%. Consider:")
                 st.write("- Reducing infrastructure tier")
                 st.write("- Adding monthly platform fee")
                 st.write("- Increasing ticket prices or occupancy rates")
         
         with tab2:
-            st.header(":material/bar_chart: Commission Rate Comparison")
+            st.header("📊 Commission Rate Comparison")
             
             # Commission rate comparison
             st.subheader("Compare Different Commission Rates")
@@ -562,7 +562,7 @@ def show_shared_multi_event_analysis():
                 st.dataframe(comparison_df.round(2), use_container_width=True, hide_index=True)
         
         with tab3:
-            st.header(":material/trending_up: Cumulative Profitability")
+            st.header("📈 Cumulative Profitability")
             
             # Select commission rate for detailed analysis
             analysis_rate = st.slider("Commission Rate for Analysis (%)", 5, 25, 10)
@@ -617,7 +617,7 @@ def show_shared_multi_event_analysis():
                 st.dataframe(cumulative_df_formatted, use_container_width=True, hide_index=True)
         
         with tab4:
-            st.header(":material/attach_money: Cost Summary")
+            st.header("💰 Cost Summary")
             
             infra_costs = analyzer.calculate_shared_infrastructure_cost()
             
@@ -640,10 +640,10 @@ def show_shared_multi_event_analysis():
             if analyzer.shared_settings['monthly_platform_fee'] > 0:
                 st.metric("Platform Fee Revenue", f"${infra_costs['platform_fee_total']:,.2f}")
             
-            # :material/computer: SELF-HOSTED REDIS COST ANALYSIS
+            # 🖥️ SELF-HOSTED REDIS COST ANALYSIS
             st.markdown("---")
-            st.subheader(":material/computer: Self-Hosted Redis vs AWS ElastiCache Analysis")
-            st.markdown("**:material/lightbulb: Considering hardware in Puebla, Mexico for cost savings**")
+            st.subheader("🖥️ Self-Hosted Redis vs AWS ElastiCache Analysis")
+            st.markdown("**💡 Considering hardware in Puebla, Mexico for cost savings**")
             
             # Estimate cache requirements based on events
             total_tickets = sum(event['num_tickets'] for event in st.session_state.shared_events)
@@ -655,14 +655,14 @@ def show_shared_multi_event_analysis():
             col1, col2 = st.columns(2)
             
             with col1:
-                st.markdown(f"**:material/bar_chart: Estimated Cache Needs: {estimated_cache_gb:.1f} GB**")
-                st.markdown(f"**:material/confirmation_number: Based on {total_tickets:,} total tickets across all events**")
+                st.markdown(f"**📊 Estimated Cache Needs: {estimated_cache_gb:.1f} GB**")
+                st.markdown(f"**🎫 Based on {total_tickets:,} total tickets across all events**")
                 
                 # Generate Redis comparison
                 redis_comparison = redis_advisor.generate_redis_cost_comparison(estimated_cache_gb)
                 
                 if not redis_comparison.empty:
-                    st.markdown("**:material/attach_money: Cost Comparison:**")
+                    st.markdown("**💰 Cost Comparison:**")
                     st.dataframe(redis_comparison, use_container_width=True, hide_index=True)
             
             with col2:
@@ -672,13 +672,13 @@ def show_shared_multi_event_analysis():
                 
                 if savings_analysis['total_savings'] > 0:
                     st.success(f"""
-                    :material/gps_fixed: **Potential Savings: ${savings_analysis['total_savings']:,.2f}**  
-                    :material/calendar_today: **Over {campaign_months} months**  
-                    :material/trending_up: **{savings_analysis['savings_percentage']:.1f}% cost reduction**  
-                    :material/balance: **Break-even: {savings_analysis['break_even_months']:.1f} months**
+                    🎯 **Potential Savings: ${savings_analysis['total_savings']:,.2f}**  
+                    📅 **Over {campaign_months} months**  
+                    📈 **{savings_analysis['savings_percentage']:.1f}% cost reduction**  
+                    ⚖️ **Break-even: {savings_analysis['break_even_months']:.1f} months**
                     """)
                     
-                    st.markdown("**:material/computer: Recommended Self-Hosted Option:**")
+                    st.markdown("**🖥️ Recommended Self-Hosted Option:**")
                     option = savings_analysis['self_hosted_option']
                     st.markdown(f"• **{option['name']}**")
                     st.markdown(f"• **Specs:** {option['specs']}")
@@ -686,24 +686,24 @@ def show_shared_multi_event_analysis():
                     st.markdown(f"• **Monthly Electricity:** ${option['monthly_electricity_cost']:,.2f}")
                     st.markdown(f"• **Total Monthly:** ${option['monthly_total_cost']:,.2f}")
                     
-                    st.markdown("**:material/cloud: AWS ElastiCache Alternative:**")
+                    st.markdown("**☁️ AWS ElastiCache Alternative:**")
                     aws_option = savings_analysis['aws_option']
                     st.markdown(f"• **Memory:** {aws_option['memory_gb']} GB")
                     st.markdown(f"• **Monthly Cost:** ${aws_option['cost_monthly']:,.2f}")
                 else:
-                    st.info(":material/lightbulb: **AWS ElastiCache** is more cost-effective for your current usage pattern")
-                    st.markdown("**:material/cloud: AWS Benefits:**")
+                    st.info("💡 **AWS ElastiCache** is more cost-effective for your current usage pattern")
+                    st.markdown("**☁️ AWS Benefits:**")
                     st.markdown("• Managed service (no maintenance)")
                     st.markdown("• High availability")
                     st.markdown("• Automatic scaling")
                     st.markdown("• Professional support")
             
             # Considerations section
-            with st.expander(":material/balance: Self-Hosted vs Cloud Considerations"):
+            with st.expander("⚖️ Self-Hosted vs Cloud Considerations"):
                 col1, col2 = st.columns(2)
                 
                 with col1:
-                    st.markdown("**:material/check_circle: Self-Hosted Advantages:**")
+                    st.markdown("**✅ Self-Hosted Advantages:**")
                     st.markdown("• Lower long-term operational costs")
                     st.markdown("• Complete control over configuration")
                     st.markdown("• One-time hardware investment")
@@ -711,7 +711,7 @@ def show_shared_multi_event_analysis():
                     st.markdown("• Cheap electricity in Puebla (~$0.08/kWh)")
                     st.markdown("• Low cooling requirements (cache server)")
                     
-                    st.markdown("**:material/warning: Self-Hosted Considerations:**")
+                    st.markdown("**⚠️ Self-Hosted Considerations:**")
                     st.markdown("• Initial hardware investment required")
                     st.markdown("• Setup and configuration time (1-2 days)")
                     st.markdown("• Maintenance responsibility")
@@ -719,7 +719,7 @@ def show_shared_multi_event_analysis():
                     st.markdown("• Need basic server administration skills")
                 
                 with col2:
-                    st.markdown("**:material/check_circle: AWS ElastiCache Advantages:**")
+                    st.markdown("**✅ AWS ElastiCache Advantages:**")
                     st.markdown("• Instant deployment (minutes)")
                     st.markdown("• Fully managed service")
                     st.markdown("• High availability with Multi-AZ")
@@ -727,7 +727,7 @@ def show_shared_multi_event_analysis():
                     st.markdown("• Professional AWS support")
                     st.markdown("• Easy scaling up/down")
                     
-                    st.markdown("**:material/warning: AWS ElastiCache Considerations:**")
+                    st.markdown("**⚠️ AWS ElastiCache Considerations:**")
                     st.markdown("• Higher ongoing monthly costs")
                     st.markdown("• Vendor lock-in")
                     st.markdown("• Data transfer costs")
@@ -735,7 +735,7 @@ def show_shared_multi_event_analysis():
                     st.markdown("• Costs scale with usage/time")
                 
                 st.markdown("---")
-                st.markdown("**:material/gps_fixed: Recommendation Summary:**")
+                st.markdown("**🎯 Recommendation Summary:**")
                 if savings_analysis['total_savings'] > 0:
                     st.markdown(f"• For campaigns **longer than {savings_analysis['break_even_months']:.1f} months**, self-hosted is more cost-effective")
                     st.markdown("• Self-hosted works well since cache failure doesn't break the system (just slower)")
@@ -756,16 +756,16 @@ def show_shared_multi_event_analysis():
                 st.write(f"- Seats.io costs: ${event_data['seatsio_costs']:,.2f}")
                 st.write(f"- **Total variable costs: ${event_data['variable_costs']:,.2f}**")
             
-            # :material/rocket_launch: ENHANCED SMART INFRASTRUCTURE RECOMMENDATION SECTION
+            # 🚀 ENHANCED SMART INFRASTRUCTURE RECOMMENDATION SECTION
             st.markdown("---")
-            st.subheader(":material/construction: Enhanced Smart Infrastructure Recommendation")
+            st.subheader("🏗️ Enhanced Smart Infrastructure Recommendation")
             
             # Infrastructure optimization options
             col1, col2 = st.columns(2)
             with col1:
-                use_enhanced_advisor = st.checkbox(":material/rocket_launch: Use Enhanced Analysis", value=True, help="Advanced operational analysis with custom configurations")
+                use_enhanced_advisor = st.checkbox("🚀 Use Enhanced Analysis", value=True, help="Advanced operational analysis with custom configurations")
             with col2:
-                latency_priority = st.checkbox(":material/flash_on: Latency Optimization Priority", value=False, help="Prioritize low latency over cost optimization")
+                latency_priority = st.checkbox("⚡ Latency Optimization Priority", value=False, help="Prioritize low latency over cost optimization")
             
             # Initialize infrastructure advisor
             if use_enhanced_advisor:
@@ -784,16 +784,16 @@ def show_shared_multi_event_analysis():
                 
                 with col1:
                     confidence_color = {
-                        'High': ':material/circle:',
-                        'Medium': ':material/circle:', 
-                        'Low': ':material/circle:'
+                        'High': '🟢',
+                        'Medium': '🟡', 
+                        'Low': '🔴'
                     }
                     confidence_level = recommendation['confidence'].split(' - ')[0].strip()
                     
                     st.markdown(f"""
-                    **:material/gps_fixed: Configuration:** {config['tier_name']} (Optimized)  
-                    **:material/bar_chart: Confidence:** {confidence_color.get(confidence_level, ':material/radio_button_unchecked:')} {recommendation['confidence']}  
-                    **:material/attach_money: Monthly Cost:** ${config['total_monthly_cost']:,.2f}  
+                    **🎯 Configuration:** {config['tier_name']} (Optimized)  
+                    **📊 Confidence:** {confidence_color.get(confidence_level, '⚪')} {recommendation['confidence']}  
+                    **💰 Monthly Cost:** ${config['total_monthly_cost']:,.2f}  
                     **:material/inventory: Description:** {config['description']}
                     """)
                 
@@ -803,17 +803,17 @@ def show_shared_multi_event_analysis():
                     cost_diff = config['total_monthly_cost'] - current_tier_cost
                     
                     if abs(cost_diff) < 50:
-                        st.info(":material/bar_chart: Similar cost to current")
+                        st.info("📊 Similar cost to current")
                     elif cost_diff > 0:
-                        st.warning(f":material/arrow_upward: Custom config\n+${cost_diff:,.2f}/month")
+                        st.warning(f"⬆️ Custom config\n+${cost_diff:,.2f}/month")
                     else:
-                        st.success(f":material/arrow_downward: Cost optimized\n${abs(cost_diff):,.2f}/month savings")
+                        st.success(f"⬇️ Cost optimized\n${abs(cost_diff):,.2f}/month savings")
                 
                 with col3:
-                    if st.button(":material/assignment: View Details"):
+                    if st.button("📋 View Details"):
                         st.session_state['show_enhanced_details'] = True
                     
-                    if st.button(":material/refresh: Use Custom Config"):
+                    if st.button("🔄 Use Custom Config"):
                         # For custom configs, we'll approximate to closest predefined tier
                         closest_tier = "Moderado"  # Default fallback
                         analyzer.shared_settings['infrastructure_tier'] = closest_tier
@@ -838,32 +838,32 @@ def show_shared_multi_event_analysis():
                 
                 with col1:
                     confidence_color = {
-                        'High': ':material/circle:',
-                        'Medium': ':material/circle:', 
-                        'Low': ':material/circle:'
+                        'High': '🟢',
+                        'Medium': '🟡', 
+                        'Low': '🔴'
                     }
                     confidence_level = recommendation['confidence'].split('(')[0].strip() if '(' in recommendation['confidence'] else recommendation['confidence'].split(' - ')[0].strip()
                     
                     st.markdown(f"""
-                    **:material/gps_fixed: Recommended Tier:** {tier_name}  
-                    **:material/bar_chart: Confidence:** {confidence_color.get(confidence_level, ':material/radio_button_unchecked:')} {recommendation['confidence']}  
-                    **:material/attach_money: Monthly Cost:** ${monthly_cost:,.2f}  
+                    **🎯 Recommended Tier:** {tier_name}  
+                    **📊 Confidence:** {confidence_color.get(confidence_level, '⚪')} {recommendation['confidence']}  
+                    **💰 Monthly Cost:** ${monthly_cost:,.2f}  
                     **:material/inventory: Description:** {description}
                     """)
                 
                 with col2:
                     current_tier = analyzer.shared_settings['infrastructure_tier']
                     if current_tier == tier_name:
-                        st.success(":material/check_circle: Current tier is optimal!")
+                        st.success("✅ Current tier is optimal!")
                     else:
                         cost_diff = monthly_cost - analyzer.infrastructure_costs[current_tier]
                         if cost_diff > 0:
-                            st.warning(f":material/arrow_upward: Upgrade needed\n+${cost_diff:,.2f}/month")
+                            st.warning(f"⬆️ Upgrade needed\n+${cost_diff:,.2f}/month")
                         else:
-                            st.info(f":material/arrow_downward: Can downgrade\n${abs(cost_diff):,.2f}/month savings")
+                            st.info(f"⬇️ Can downgrade\n${abs(cost_diff):,.2f}/month savings")
                 
                 with col3:
-                    if st.button(":material/refresh: Apply Recommendation"):
+                    if st.button("🔄 Apply Recommendation"):
                         analyzer.shared_settings['infrastructure_tier'] = tier_name
                         st.success(f"Infrastructure updated to {tier_name}!")
                         st.rerun()
@@ -871,7 +871,7 @@ def show_shared_multi_event_analysis():
             # Enhanced Details Section (for custom configurations)
             if use_enhanced_advisor and recommendation['type'] == 'custom' and st.session_state.get('show_enhanced_details', False):
                 st.markdown("---")
-                st.subheader(":material/biotech: Detailed Operational Analysis")
+                st.subheader("🔬 Detailed Operational Analysis")
                 
                 config = recommendation['config']
                 analysis = recommendation['analysis']
@@ -882,14 +882,14 @@ def show_shared_multi_event_analysis():
                 col1, col2 = st.columns(2)
                 
                 with col1:
-                    st.markdown("**:material/confirmation_number: Ticket Purchase Phase**")
+                    st.markdown("**🎫 Ticket Purchase Phase**")
                     purchase_ops = operations['ticket_purchase_phase']
                     st.markdown(f"• Peak Concurrent Buyers: **{purchase_ops['peak_concurrent_buyers']:,}**")
                     st.markdown(f"• DB Writes/Hour: **{purchase_ops['db_writes_per_hour']:,}**")
                     st.markdown(f"• Payment Transactions/Hour: **{purchase_ops['payment_transactions_hour']:,}**")
                     st.markdown(f"• MATIC Operations: **{purchase_ops['matic_minting_operations']:,}**")
                     
-                    st.markdown("**:material/email: QR & Email Phase**")
+                    st.markdown("**📧 QR & Email Phase**")
                     qr_ops = operations['qr_email_phase']
                     st.markdown(f"• QR Codes to Generate: **{qr_ops['qr_generations_needed']:,}**")
                     st.markdown(f"• Emails to Send: **{qr_ops['emails_to_send']:,}**")
@@ -897,7 +897,7 @@ def show_shared_multi_event_analysis():
                     st.markdown(f"• Storage for QRs: **{qr_ops['storage_for_qrs_gb']:.2f} GB**")
                 
                 with col2:
-                    st.markdown("**:material/search: Event Day Scanning**")
+                    st.markdown("**🔍 Event Day Scanning**")
                     scan_ops = operations['event_day_scanning']
                     st.markdown(f"• Peak Scans/Hour: **{scan_ops['peak_scans_per_hour']:,}**")
                     st.markdown(f"• DB Reads/Hour: **{scan_ops['db_reads_per_hour']:,}**")
@@ -911,13 +911,13 @@ def show_shared_multi_event_analysis():
                     st.markdown(f"• Cache Usage: **{browse_ops['cache_usage_gb']:.1f} GB**")
                 
                 # AWS Components Recommendation
-                st.markdown("**:material/construction: Custom AWS Architecture**")
+                st.markdown("**🏗️ Custom AWS Architecture**")
                 components = config['aws_components']
                 
                 col1, col2, col3 = st.columns(3)
                 
                 with col1:
-                    st.markdown("**:material/save: Database (RDS)**")
+                    st.markdown("**💾 Database (RDS)**")
                     rds_info = components['rds']
                     st.markdown(f"Instance: **{rds_info['instance']}**")
                     st.markdown(f"Cost: **${rds_info['cost']:,.2f}/month**")
@@ -930,7 +930,7 @@ def show_shared_multi_event_analysis():
                         st.markdown(f"• Max Connections: {rds_specs['max_connections']:,}")
                 
                 with col2:
-                    st.markdown("**:material/computer: Compute (EC2)**")
+                    st.markdown("**🖥️ Compute (EC2)**")
                     ec2_info = components['ec2']
                     st.markdown(f"Instance: **{ec2_info['instance']}**")
                     st.markdown(f"Cost: **${ec2_info['cost']:,.2f}/month**")
@@ -943,7 +943,7 @@ def show_shared_multi_event_analysis():
                         st.markdown(f"• Concurrent Users: {ec2_specs['concurrent_users']:,}")
                 
                 with col3:
-                    st.markdown("**:material/flash_on: Cache (Redis)**")
+                    st.markdown("**⚡ Cache (Redis)**")
                     redis_info = components['redis']
                     st.markdown(f"Instance: **{redis_info['instance']}**")
                     st.markdown(f"Cost: **${redis_info['cost']:,.2f}/month**")
@@ -955,7 +955,7 @@ def show_shared_multi_event_analysis():
                         st.markdown(f"• Memory: {redis_specs['memory_gb']} GB")
                 
                 # Additional Services Cost Breakdown
-                st.markdown("**:material/attach_money: Additional Services**")
+                st.markdown("**💰 Additional Services**")
                 additional_services = components['additional_services']
                 
                 services_data = []
@@ -982,24 +982,24 @@ def show_shared_multi_event_analysis():
                 
                 # Cost Drivers & Optimization Notes
                 if analysis.get('cost_drivers'):
-                    st.markdown("**:material/gps_fixed: Cost Drivers Identified**")
+                    st.markdown("**🎯 Cost Drivers Identified**")
                     for driver in analysis['cost_drivers']:
                         st.markdown(f"• {driver}")
                 
                 if config.get('optimization_notes'):
-                    st.markdown("**:material/lightbulb: Optimization Recommendations**")
+                    st.markdown("**💡 Optimization Recommendations**")
                     for note in config['optimization_notes']:
                         st.markdown(f"• {note}")
                 
                 # Latency Optimization
                 if recommendation.get('latency_optimization'):
-                    st.markdown("**:material/flash_on: Latency Optimization Suggestions**")
+                    st.markdown("**⚡ Latency Optimization Suggestions**")
                     for suggestion in recommendation['latency_optimization']:
                         st.markdown(f"• {suggestion}")
                 
                 # Cost Comparison with Predefined Tiers
                 if recommendation.get('cost_comparison'):
-                    st.markdown("**:material/bar_chart: Cost Comparison with Standard Tiers**")
+                    st.markdown("**📊 Cost Comparison with Standard Tiers**")
                     comparison = recommendation['cost_comparison']
                     comparison_data = []
                     
@@ -1008,21 +1008,21 @@ def show_shared_multi_event_analysis():
                             'Tier': tier_name,
                             'Monthly Cost': f"${data['monthly_cost']:,.2f}",
                             'Savings vs Custom': f"${data['savings_vs_custom']:,.2f}",
-                            'Fits Requirements': ':material/check_circle:' if data['fits_requirements'] else ':material/cancel:'
+                            'Fits Requirements': '✅' if data['fits_requirements'] else '❌'
                         })
                     
                     comparison_df = pd.DataFrame(comparison_data)
                     st.dataframe(comparison_df, use_container_width=True, hide_index=True)
                 
-                if st.button(":material/keyboard_arrow_down: Hide Enhanced Details"):
+                if st.button("🔽 Hide Enhanced Details"):
                     st.session_state['show_enhanced_details'] = False
                     st.rerun()
             
             # Technical Analysis Details
-            with st.expander(":material/build: Technical Analysis Details"):
+            with st.expander("🔧 Technical Analysis Details"):
                 if use_enhanced_advisor:
                     if recommendation['type'] == 'custom':
-                        st.info(":material/lightbulb: **Enhanced analysis available above!** Click 'View Details' for comprehensive operational breakdown.")
+                        st.info("💡 **Enhanced analysis available above!** Click 'View Details' for comprehensive operational breakdown.")
                         requirements = recommendation['analysis']['requirements']
                     else:
                         # Enhanced advisor but predefined tier
@@ -1031,7 +1031,7 @@ def show_shared_multi_event_analysis():
                     col1, col2 = st.columns(2)
                     
                     with col1:
-                        st.markdown("**:material/trending_up: Campaign Requirements:**")
+                        st.markdown("**📈 Campaign Requirements:**")
                         st.markdown(f"• **Events:** {requirements.get('total_events', 0)}")
                         st.markdown(f"• **Total Tickets:** {requirements.get('total_tickets', 0):,}")
                         st.markdown(f"• **Expected Sold:** {requirements.get('total_sold_tickets', 0):,}")
@@ -1044,7 +1044,7 @@ def show_shared_multi_event_analysis():
                         if recommendation['type'] == 'custom':
                             config = recommendation['config']
                             components = config['aws_components']
-                            st.markdown("**:material/build: Custom AWS Components:**")
+                            st.markdown("**🛠️ Custom AWS Components:**")
                             st.markdown(f"• **RDS:** {components['rds']['instance']} (${components['rds']['cost']:,.2f}/month)")
                             st.markdown(f"• **EC2:** {components['ec2']['instance']} (${components['ec2']['cost']:,.2f}/month)")
                             st.markdown(f"• **Redis:** {components['redis']['instance']} (${components['redis']['cost']:,.2f}/month)")
@@ -1052,7 +1052,7 @@ def show_shared_multi_event_analysis():
                             st.markdown(f"**Total AWS: ${config['total_aws_cost']:,.2f}/month**")
                         else:
                             # Predefined tier from enhanced advisor
-                            st.markdown("**:material/build: Predefined Tier Selected:**")
+                            st.markdown("**🛠️ Predefined Tier Selected:**")
                             config = recommendation['config']
                             st.markdown(f"• **Tier:** {config['name']}")
                             st.markdown(f"• **AWS Cost:** ${config['aws_cost']:,.2f}/month")
@@ -1067,7 +1067,7 @@ def show_shared_multi_event_analysis():
                     col1, col2 = st.columns(2)
                     
                     with col1:
-                        st.markdown("**:material/trending_up: Campaign Requirements:**")
+                        st.markdown("**📈 Campaign Requirements:**")
                         st.markdown(f"• **Events:** {req.get('total_events', 0)}")
                         st.markdown(f"• **Total Tickets:** {req.get('total_tickets', 0):,}")
                         st.markdown(f"• **Expected Sold:** {req.get('total_sold_tickets', 0):,}")
@@ -1077,7 +1077,7 @@ def show_shared_multi_event_analysis():
                     
                     with col2:
                         if analysis:
-                            st.markdown("**:material/build: Recommended AWS Components:**")
+                            st.markdown("**🛠️ Recommended AWS Components:**")
                             st.markdown(f"• **RDS Instance:** {analysis['recommended_rds']}")
                             st.markdown(f"  - vCPU: {analysis['rds_specs']['vcpu']}, Memory: {analysis['rds_specs']['memory_gb']} GB")
                             st.markdown(f"  - Max Connections: {analysis['rds_specs']['max_connections']:,}")
@@ -1085,7 +1085,7 @@ def show_shared_multi_event_analysis():
                             st.markdown(f"  - vCPU: {analysis['ec2_specs']['vcpu']}, Memory: {analysis['ec2_specs']['memory_gb']} GB")
                             st.markdown(f"  - Max Concurrent Users: {analysis['ec2_specs']['concurrent_users']:,}")
                             
-                            st.markdown("**:material/payments: AWS Cost Breakdown:**")
+                            st.markdown("**💵 AWS Cost Breakdown:**")
                             costs = analysis['estimated_costs']
                             st.markdown(f"• RDS: ${costs['rds_monthly']:,.2f}/month")
                             st.markdown(f"• EC2: ${costs['ec2_monthly']:,.2f}/month")
@@ -1096,7 +1096,7 @@ def show_shared_multi_event_analysis():
             
             # Comprehensive Infrastructure Analysis
             if use_enhanced_advisor:
-                with st.expander(":material/refresh: Standard vs Enhanced Comparison"):
+                with st.expander("🔄 Standard vs Enhanced Comparison"):
                     st.markdown("**Compare Enhanced Analysis with Standard Recommendations**")
                     
                     # Get both recommendations for comparison
@@ -1106,7 +1106,7 @@ def show_shared_multi_event_analysis():
                     col1, col2 = st.columns(2)
                     
                     with col1:
-                        st.markdown("**:material/build: Standard Analysis**")
+                        st.markdown("**🔧 Standard Analysis**")
                         st.markdown(f"• **Recommended Tier:** {standard_recommendation['recommended_tier']}")
                         st.markdown(f"• **Monthly Cost:** ${standard_recommendation['tier_info']['total_cost']:,.2f}")
                         st.markdown(f"• **Confidence:** {standard_recommendation['confidence']}")
@@ -1119,7 +1119,7 @@ def show_shared_multi_event_analysis():
                             st.markdown(f"• Storage: ${analysis['storage_monthly']:,.2f}")
                     
                     with col2:
-                        st.markdown("**:material/rocket_launch: Enhanced Analysis**")
+                        st.markdown("**🚀 Enhanced Analysis**")
                         if recommendation['type'] == 'custom':
                             config = recommendation['config']
                             st.markdown(f"• **Configuration:** {config['tier_name']} (Custom)")
@@ -1142,14 +1142,14 @@ def show_shared_multi_event_analysis():
                     if recommendation['type'] == 'custom':
                         cost_diff = recommendation['config']['total_monthly_cost'] - standard_recommendation['tier_info']['total_cost']
                         if cost_diff < -100:
-                            st.success(f":material/gps_fixed: **Enhanced analysis saves ${abs(cost_diff):,.2f}/month** with custom configuration!")
+                            st.success(f"🎯 **Enhanced analysis saves ${abs(cost_diff):,.2f}/month** with custom configuration!")
                         elif cost_diff > 100:
-                            st.warning(f":material/warning: Enhanced analysis suggests ${cost_diff:,.2f}/month more for better performance/reliability")
+                            st.warning(f"⚠️ Enhanced analysis suggests ${cost_diff:,.2f}/month more for better performance/reliability")
                         else:
-                            st.info(":material/bar_chart: Both analyses suggest similar cost ranges")
+                            st.info("📊 Both analyses suggest similar cost ranges")
             
             # Infrastructure Tier Comparison
-            with st.expander(":material/bar_chart: Infrastructure Tier Comparison"):
+            with st.expander("📊 Infrastructure Tier Comparison"):
                 if use_enhanced_advisor and hasattr(advisor, 'predefined_tiers'):
                     # Enhanced advisor - show custom comparison
                     st.markdown("**Predefined Tiers vs Your Requirements**")
@@ -1178,8 +1178,8 @@ def show_shared_multi_event_analysis():
                                 'Max Events': tier_specs['max_events'],
                                 'Max Users': f"{tier_specs['max_concurrent_users']:,}",
                                 'Target Latency': f"{tier_specs['target_latency_ms']}ms",
-                                'Fits Requirements': ':material/check_circle:' if fits_all else ':material/cancel:',
-                                'Recommended': ':material/star:' if is_recommended else ''
+                                'Fits Requirements': '✅' if fits_all else '❌',
+                                'Recommended': '🌟' if is_recommended else ''
                             })
                         
                         comparison_df = pd.DataFrame(comparison_data)
@@ -1188,7 +1188,7 @@ def show_shared_multi_event_analysis():
                         # Show custom recommendation if available
                         if recommendation['type'] == 'custom':
                             st.markdown("---")
-                            st.markdown("**:material/gps_fixed: Custom Configuration (Recommended)**")
+                            st.markdown("**🎯 Custom Configuration (Recommended)**")
                             custom_config = recommendation['config']
                             
                             custom_data = [{
@@ -1198,7 +1198,7 @@ def show_shared_multi_event_analysis():
                                 'Events Supported': custom_config['performance_profile']['max_events'],
                                 'Max Users': f"{custom_config['performance_profile']['max_concurrent_users']:,}",
                                 'Target Latency': f"{custom_config['performance_profile']['latency_target_ms']}ms",
-                                'Status': ':material/rocket_launch: Optimized'
+                                'Status': '🚀 Optimized'
                             }]
                             
                             custom_df = pd.DataFrame(custom_data)
@@ -1219,33 +1219,33 @@ def show_shared_multi_event_analysis():
                             'Max Events': tier_data['capacity']['max_events'],
                             'Max Users': f"{tier_data['capacity']['max_concurrent_users']:,}",
                             'Max Transactions': f"{tier_data['capacity']['max_db_transactions']:,}",
-                            'Fits Requirements': ':material/check_circle:' if fits_all else ':material/cancel:',
-                            'Recommended': ':material/star:' if tier_data['is_recommended'] else ''
+                            'Fits Requirements': '✅' if fits_all else '❌',
+                            'Recommended': '🌟' if tier_data['is_recommended'] else ''
                         })
                     
                     comparison_df = pd.DataFrame(comparison_data)
                     st.dataframe(comparison_df, use_container_width=True, hide_index=True)
             
             # Optimization Recommendations
-            with st.expander(":material/lightbulb: Optimization Recommendations"):
+            with st.expander("💡 Optimization Recommendations"):
                 if use_enhanced_advisor:
                     if recommendation['type'] == 'custom':
                         config = recommendation['config']
                         
                         # Show optimization notes from custom config
                         if config.get('optimization_notes'):
-                            st.markdown("**:material/gps_fixed: Operational Optimizations:**")
+                            st.markdown("**🎯 Operational Optimizations:**")
                             for i, note in enumerate(config['optimization_notes'], 1):
                                 st.markdown(f"{i}. {note}")
                         
                         # Show latency optimizations
                         if recommendation.get('latency_optimization'):
-                            st.markdown("**:material/flash_on: Latency Optimizations:**")
+                            st.markdown("**⚡ Latency Optimizations:**")
                             for i, opt in enumerate(recommendation['latency_optimization'], 1):
                                 st.markdown(f"{i}. {opt}")
                         
                         # Cost optimization suggestions
-                        st.markdown("**:material/attach_money: Cost Optimization Tips:**")
+                        st.markdown("**💰 Cost Optimization Tips:**")
                         total_aws_cost = config['total_aws_cost']
                         if total_aws_cost < 200:
                             st.markdown("• Consider Aurora Serverless for variable workloads")
@@ -1261,7 +1261,7 @@ def show_shared_multi_event_analysis():
                         # Redis Cost Analysis for Custom Configurations
                         if recommendation['type'] == 'custom':
                             st.markdown("---")
-                            st.markdown("**:material/lightbulb: Redis Cost Optimization Analysis**")
+                            st.markdown("**💡 Redis Cost Optimization Analysis**")
                             
                             analysis = recommendation['analysis']
                             cache_memory_needed = analysis['requirements']['cache_memory_gb']
@@ -1270,7 +1270,7 @@ def show_shared_multi_event_analysis():
                             redis_comparison = advisor.generate_redis_cost_comparison(cache_memory_needed)
                             
                             if not redis_comparison.empty:
-                                st.markdown(f"**:material/search: Cache Memory Needed: {cache_memory_needed:.1f} GB**")
+                                st.markdown(f"**🔍 Cache Memory Needed: {cache_memory_needed:.1f} GB**")
                                 st.dataframe(redis_comparison, use_container_width=True, hide_index=True)
                                 
                                 # Detailed savings analysis
@@ -1281,16 +1281,16 @@ def show_shared_multi_event_analysis():
                                 
                                 if savings_analysis['total_savings'] > 0:
                                     st.success(f"""
-                                    :material/gps_fixed: **Self-Hosted Redis could save ${savings_analysis['total_savings']:,.2f}** 
+                                    🎯 **Self-Hosted Redis could save ${savings_analysis['total_savings']:,.2f}** 
                                     over {savings_analysis['campaign_duration_months']} months 
                                     ({savings_analysis['savings_percentage']:.1f}% savings)
                                     
-                                    :material/attach_money: **Break-even point:** {savings_analysis['break_even_months']:.1f} months
+                                    💰 **Break-even point:** {savings_analysis['break_even_months']:.1f} months
                                     """)
                                     
                                     col1, col2 = st.columns(2)
                                     with col1:
-                                        st.markdown("**:material/computer: Self-Hosted Option:**")
+                                        st.markdown("**🖥️ Self-Hosted Option:**")
                                         option = savings_analysis['self_hosted_option']
                                         st.markdown(f"• **Hardware:** {option['specs']}")
                                         st.markdown(f"• **Initial Cost:** ${option['hardware_cost_usd']:,.2f}")
@@ -1298,7 +1298,7 @@ def show_shared_multi_event_analysis():
                                         st.markdown(f"• **Total Monthly:** ${option['monthly_total_cost']:,.2f}")
                                     
                                     with col2:
-                                        st.markdown("**:material/cloud: AWS ElastiCache:**")
+                                        st.markdown("**☁️ AWS ElastiCache:**")
                                         aws_option = savings_analysis['aws_option']
                                         st.markdown(f"• **Memory:** {aws_option['memory_gb']} GB")
                                         st.markdown(f"• **Monthly Cost:** ${aws_option['cost_monthly']:,.2f}")
@@ -1307,21 +1307,21 @@ def show_shared_multi_event_analysis():
                                 else:
                                     st.info("AWS ElastiCache is more cost-effective for your usage pattern")
                             
-                            st.markdown("**:material/balance: Considerations:**")
-                            st.markdown("• :material/check_circle: **Self-hosted:** Lower long-term costs, full control, one-time hardware investment")
-                            st.markdown("• :material/warning: **Self-hosted:** Setup time, maintenance responsibility, single point of failure")
-                            st.markdown("• :material/check_circle: **AWS:** Managed service, high availability, instant scaling")
-                            st.markdown("• :material/warning: **AWS:** Higher ongoing costs, vendor lock-in")
+                            st.markdown("**⚖️ Considerations:**")
+                            st.markdown("• ✅ **Self-hosted:** Lower long-term costs, full control, one-time hardware investment")
+                            st.markdown("• ⚠️ **Self-hosted:** Setup time, maintenance responsibility, single point of failure")
+                            st.markdown("• ✅ **AWS:** Managed service, high availability, instant scaling")
+                            st.markdown("• ⚠️ **AWS:** Higher ongoing costs, vendor lock-in")
                     
                     else:
                         # Enhanced advisor but predefined tier
                         if recommendation.get('latency_optimization'):
-                            st.markdown("**:material/flash_on: Latency Optimizations:**")
+                            st.markdown("**⚡ Latency Optimizations:**")
                             for i, opt in enumerate(recommendation['latency_optimization'], 1):
                                 st.markdown(f"{i}. {opt}")
                         
                         # General recommendations
-                        st.markdown("**:material/build: General Recommendations:**")
+                        st.markdown("**🔧 General Recommendations:**")
                         st.markdown("• Enable Redis caching for ticket validation")
                         st.markdown("• Use CloudFront CDN for static content delivery")
                         st.markdown("• Consider read replicas for database performance")
@@ -1330,19 +1330,19 @@ def show_shared_multi_event_analysis():
                 else:
                     # Legacy advisor recommendations
                     if recommendation.get('recommendations'):
-                        st.markdown("**:material/build: Infrastructure Recommendations:**")
+                        st.markdown("**🔧 Infrastructure Recommendations:**")
                         for i, rec in enumerate(recommendation['recommendations'], 1):
                             st.markdown(f"{i}. {rec}")
                     
                     # Add general e-ticketing optimizations
-                    st.markdown("**:material/confirmation_number: E-Ticketing Specific Optimizations:**")
+                    st.markdown("**🎫 E-Ticketing Specific Optimizations:**")
                     st.markdown("• Pre-generate QR codes during off-peak hours")
                     st.markdown("• Cache frequently accessed event data")
                     st.markdown("• Use email queues for bulk ticket sending")
                     st.markdown("• Implement progressive web app for better mobile performance")
             
             # Performance Requirements vs Tier Capacity Chart
-            with st.expander(":material/trending_up: Performance Requirements Analysis"):
+            with st.expander("📈 Performance Requirements Analysis"):
                 # Handle different recommendation structures
                 if use_enhanced_advisor:
                     if recommendation.get('analysis') and recommendation['analysis'].get('requirements'):
@@ -1409,7 +1409,7 @@ def show_shared_multi_event_analysis():
                     st.plotly_chart(fig, use_container_width=True)
         
         with tab5:
-            st.header(":material/alarm: Temporal Infrastructure Planning")
+            st.header("⏰ Temporal Infrastructure Planning")
             st.markdown("**Optimize infrastructure costs across time periods based on demand patterns**")
             
             # Check if events have start_date (for backward compatibility)
